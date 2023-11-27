@@ -1,0 +1,7 @@
+## .gitignore boilerplate v1.1.0 (2023-10-09) sandromiguel@sandromiguel.com
+
+## Editor directory
+**/.vscode
+
+## Ignore NPM 'node_modules' directory
+**/node_modules
