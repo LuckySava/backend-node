@@ -1,6 +1,7 @@
 import express from 'express';
 import mysql from './config/db.js';
 import bodyParser from 'body-parser';
+import emailValidator from './utils/email-validator.js';
 
 const app = express();
 
@@ -13,23 +14,24 @@ app.get('/', (req, res) => {
 
 app.post('/v1/user', (req, res) => {
 
-    console.log(req.body)
-
     const { email, name } = req.body;
 
-    if (email && name) {
+    if (emailValidator(email) && name.length >= 2) {
         const sql = "INSERT INTO Users (email, name) VALUES ?";
         const data = [
             [email, name]
         ]
+
         mysql.query(sql, [data], (err, result) => {
             if (err) throw err;
             console.log("user was added", result);
-            return;
         })
+
+        res.send('new user was added')
+    } else {
+        res.send('something went wrong, check request body')
     }
 
-    res.send('new user was addded')
 })
 
 app.listen(5000, () => {
