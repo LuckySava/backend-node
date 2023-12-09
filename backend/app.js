@@ -74,10 +74,10 @@ app.delete('/v1/user/:id', (req, res) => {
             console.log("error: ", err);
         }
         console.log("deleted user with id: ", id);
+        res.send('delete by id request was successful')
     })
-    res.send('delete by id request was successful')
 })
 
 app.listen(5000, () => {
-    console.log('sever running at 5000 Port')
+    console.log('server running at 5000 Port')
 })
