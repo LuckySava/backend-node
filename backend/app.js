@@ -3,17 +3,16 @@ import mysql from './config/db.js';
 import bodyParser from 'body-parser';
 import emailValidator from './utils/email-validator.js';
 
-const app = express();
+export const app = express();
+
+// Створити роутери і підключити методи з контролера
 
 app.use(bodyParser.urlencoded({ extended: false }))
 app.use(bodyParser.json())
 
-app.get('/', (req, res) => {
-    res.send('<h1>Home</h1>')
-})
-
-app.post('/v1/user', (req, res) => {
+const createUser = (req, res) => {
     const { email, name } = req.body;
+    console.log({ email, name })
 
     if (emailValidator(email) && name.length >= 2) {
         const sql = "INSERT INTO Users (email, name) VALUES ?";
@@ -30,10 +29,9 @@ app.post('/v1/user', (req, res) => {
     } else {
         res.send('something went wrong, check request body')
     }
+}
 
-});
-
-app.put('/v1/user/:id', (req, res) => {
+const updateUser = (req, res) => {
     const id = req.params.id;
     const { email, name } = req.body;
 
@@ -48,10 +46,11 @@ app.put('/v1/user/:id', (req, res) => {
     } else {
         res.send('something went wrong')
     }
-})
+}
 
-app.get('/v1/user/:id', (req, res) => {
+const getUser = (req, res) => {
     const id = req.params.id;
+
 
     if (id || id === 0) {
         const sql = `SELECT * FROM Users WHERE id = ${id}`;
@@ -63,9 +62,9 @@ app.get('/v1/user/:id', (req, res) => {
     } else {
         res.send('something went wrong')
     }
-});
+}
 
-app.delete('/v1/user/:id', (req, res) => {
+const deleteUser = (req, res) => {
     const id = req.params.id;
     const sql = `DELETE FROM Users WHERE id = ${id}`;
 
@@ -76,7 +75,17 @@ app.delete('/v1/user/:id', (req, res) => {
         console.log("deleted user with id: ", id);
         res.send('delete by id request was successful')
     })
-})
+}
+
+const userRoute = express.Router()
+
+userRoute.route('/').post(createUser)
+userRoute.route('/:id')
+    .put(updateUser)
+    .get(getUser)
+    .delete(deleteUser)
+
+app.use('/api/v1/user', userRoute)
 
 app.listen(5000, () => {
     console.log('server running at 5000 Port')

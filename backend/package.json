@@ -6,7 +6,8 @@
   "type": "module",
   "scripts": {
     "start": "node app.js",
-    "dev": "nodemon app.js"
+    "dev": "nodemon app.js",
+    "debug": "node --inspect app.js"
   },
   "author": "Savchenko Sasha",
   "license": "ISC",
@@ -17,6 +18,7 @@
     "body-parser": "^1.20.2",
     "dotenv": "^16.3.1",
     "express": "^4.18.2",
+    "express-validator": "^7.0.1",
     "mysql2": "^3.6.5"
   }
 }
